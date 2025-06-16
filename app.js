@@ -1,3 +1,4 @@
+// To run, need to use 'node app.js' (to keep watch of the changes, use 'node --watch app.js')
 const express = require("express");
 
 const app = express();
