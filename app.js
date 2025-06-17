@@ -1,14 +1,15 @@
 // To run, need to use 'node app.js' (to keep watch of the changes, use 'node --watch app.js')
 const express = require("express");
+const {
+  handleInsert,
+  handleSelectAll,
+  handleSelectById,
+  handleDelete,
+  handleUpdate,
+} = require("./databaseActions");
 
 const app = express();
-
-const mockDatabase = [
-  {
-    id: 1,
-    name: "test",
-  },
-];
+app.use(express.json());
 
 const port = 3000;
 
@@ -16,22 +17,38 @@ app.listen(port, () =>
   console.log(`Server successfully running in port ${port}.`)
 );
 
-app.get("/products", (req, res) => {
-  console.log("get route!");
+app.get("/games", (_, res) => {
+  const result = handleSelectAll.all();
+  res.json({ message: `${result.length} result(s) found.`, data: result });
 });
 
-app.post("/products", (req, res) => {
-  console.log("post route!");
+app.get("/games/query", (req, res) => {
+  const { id } = req.query;
+  const result = handleSelectById.all(id);
+  res.json({ message: `${result.length} result(s) found.`, data: result });
 });
 
-app.put("/products/query", (req, res) => {
-  console.log("put route!");
+app.get("/games/:id", (req, res) => {
+  const { id } = req.params;
+  const result = handleSelectById.all(id);
+  res.json({ message: `${result.length} result(s) found.`, data: result });
 });
 
-app.put("/products/:id", (req, res) => {
-  console.log("put route (again)!");
+app.post("/games", (req, res) => {
+  const { id, name, price } = req.body;
+  const result = handleInsert.run(id, name, price);
+  res.json({ message: `${result.changes} change(s) were made.` });
 });
 
-app.delete("/products/:id", (req, res) => {
-  console.log("delete route!");
+app.put("/games/:id", (req, res) => {
+  const { id } = req.params;
+  const { newPrice } = req.body;
+  const result = handleUpdate.run(newPrice, id);
+  res.json({ message: `${result.changes} change(s) were made.` });
+});
+
+app.delete("/games/:id", (req, res) => {
+  const { id } = req.params;
+  const result = handleDelete.run(id);
+  res.json({ message: `${result.changes} change(s) were made.` });
 });
