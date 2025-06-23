@@ -25,13 +25,13 @@ app.get("/games", (_, res) => {
 app.get("/games/query", (req, res) => {
   const { id } = req.query;
   const result = handleSelectById.all(id);
-  res.json({ message: `${result.length} result(s) found.`, data: result });
+  res.json({ data: result });
 });
 
 app.get("/games/:id", (req, res) => {
   const { id } = req.params;
-  const result = handleSelectById.all(id);
-  res.json({ message: `${result.length} result(s) found.`, data: result });
+  const result = handleSelectById.get(id);
+  res.json({ data: result });
 });
 
 app.post("/games", (req, res) => {

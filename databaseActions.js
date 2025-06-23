@@ -29,7 +29,7 @@ const handleUpdate = database.prepare(
 //   handleInsert.run(game.id, game.name, game.price);
 // }
 
-// To run the functions, .all() is used when data is returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
+// To run the functions, .all() (or .get() if only one result is expected) is used when data is returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
 module.exports = {
   handleInsert,
   handleSelectAll,
