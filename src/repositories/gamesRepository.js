@@ -24,7 +24,7 @@ const handleUpdate = database.prepare(
 );
 
 // Add all data again
-// const { games } = require("./games");
+// const { games } = require("./seed/gamesSeed.js");
 // for (const game of games) {
 //   handleInsert.run(game.id, game.name, game.price);
 // }
