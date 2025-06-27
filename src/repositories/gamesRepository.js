@@ -5,12 +5,12 @@ const { DatabaseSync } = require("node:sqlite");
 const database = new DatabaseSync("./db.sql");
 
 database.exec(
-  `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY, name TEXT, price REAL) STRICT`
+  `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
 );
 
 // prepare the function
 const handleInsert = database.prepare(
-  "INSERT INTO games (id, name, price) VALUES (?, ?, ?)"
+  "INSERT INTO games ( name, price) VALUES (?, ?)"
 );
 
 const handleSelectAll = database.prepare("SELECT * FROM games ORDER BY id");
@@ -23,7 +23,7 @@ const handleUpdate = database.prepare(
   "UPDATE games SET price = ? WHERE id = ?"
 );
 
-// Add all data again
+// // Add all data again
 // const { games } = require("./seed/gamesSeed.js");
 // for (const game of games) {
 //   handleInsert.run(game.id, game.name, game.price);

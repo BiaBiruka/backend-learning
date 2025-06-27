@@ -25,8 +25,8 @@ class GamesController {
 
   async addGame(req, res) {
     const gameServiceInstance = new GamesService();
-    const { id, name, price } = req.body;
-    const result = await gameServiceInstance.addGame(id, name, price);
+    const { name, price } = req.body;
+    const result = await gameServiceInstance.addGame(name, price);
     return res.status(200).json(result);
   }
 
@@ -34,15 +34,43 @@ class GamesController {
     const gameServiceInstance = new GamesService();
     const { id } = req.params;
     const { newPrice } = req.body;
-    const result = await gameServiceInstance.editGame(newPrice, id);
-    return res.status(200).json(result);
+
+    try {
+      const row = await gameServiceInstance.fetchGame(id);
+
+      if (row) {
+        await gameServiceInstance.editGame(newPrice, id);
+        return res.status(200).json({
+          message: "Price of '" + row.name + "' updated sucessfully.",
+        });
+      }
+      return res.status(404).json({ message: "Game not found." });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: "Failed to update. Error: " + err });
+    }
   }
 
   async deleteGame(req, res) {
     const gameServiceInstance = new GamesService();
     const { id } = req.params;
-    const result = await gameServiceInstance.deleteGame(id);
-    return res.status(200).json(result);
+
+    try {
+      const row = await gameServiceInstance.fetchGame(id);
+
+      if (row) {
+        await gameServiceInstance.deleteGame(id);
+        return res.status(200).json({
+          message: "'" + row.name + "' deleted sucessfully.",
+        });
+      }
+      return res.status(404).json({ message: "Game not found." });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: "Failed to delete. Error: " + err });
+    }
   }
 }
 

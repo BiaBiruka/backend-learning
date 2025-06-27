@@ -17,8 +17,8 @@ class GamesService {
     return requestResult;
   }
 
-  async addGame(id, name, price) {
-    const requestResult = handleInsert.run(id, name, price);
+  async addGame(name, price) {
+    const requestResult = handleInsert.run(name, price);
     return requestResult;
   }
 
