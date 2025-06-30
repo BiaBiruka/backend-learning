@@ -5,32 +5,54 @@ const {
   handleInsert,
   handleUpdate,
   handleDelete,
+  handleSelectByName,
 } = require("../repositories/gamesRepository");
 
 class GamesService {
   async fetchAllGames() {
-    const requestResult = handleSelectAll.all();
+    const requestResult = await handleSelectAll.all();
+    if (requestResult.length < 1) {
+      throw new Error(`No games found.`);
+    }
     return requestResult;
   }
 
-  async fetchGame(id) {
-    const requestResult = handleSelectById.get(id);
+  async fetchGameById(id) {
+    const requestResult = await handleSelectById.get(id);
+    if (!requestResult) {
+      throw new Error(`Game not found.`);
+    }
     return requestResult;
   }
 
   async addGame(name, price) {
-    const requestResult = handleInsert.run(name, price);
+    const game = await handleSelectByName.get(name);
+
+    if (game) {
+      throw new Error(`'${game.name}' already exists!`);
+    }
+    const requestResult = await handleInsert.run(name, price);
     return requestResult;
   }
 
   async editGame(newPrice, id) {
-    const requestResult = handleUpdate.run(newPrice, id);
-    return requestResult;
+    const game = await handleSelectById.get(id);
+
+    if (game) {
+      const requestResult = await handleUpdate.run(newPrice, id);
+      return requestResult;
+    }
+    throw new Error("Game not found.");
   }
 
   async deleteGame(id) {
-    const requestResult = handleDelete.run(id);
-    return requestResult;
+    const game = await handleSelectById.get(id);
+
+    if (game) {
+      const requestResult = await handleDelete.run(id);
+      return requestResult;
+    }
+    throw new Error("Game not found.");
   }
 }
 

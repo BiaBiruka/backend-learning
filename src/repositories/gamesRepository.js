@@ -19,6 +19,10 @@ const handleSelectAll = database.prepare("SELECT * FROM games ORDER BY id");
 
 const handleSelectById = database.prepare("SELECT * FROM games WHERE id = ?");
 
+const handleSelectByName = database.prepare(
+  "SELECT * FROM games WHERE LOWER(name) = LOWER(?)"
+);
+
 const handleDelete = database.prepare("DELETE FROM games WHERE id = ?");
 
 const handleUpdate = database.prepare(
@@ -37,6 +41,7 @@ module.exports = {
   handleInsert,
   handleSelectAll,
   handleSelectById,
+  handleSelectByName,
   handleDelete,
   handleUpdate,
 };
