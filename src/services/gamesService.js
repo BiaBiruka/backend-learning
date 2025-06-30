@@ -1,3 +1,4 @@
+// SERVICE - Calls the function to interact with DB and deals with business rules
 const {
   handleSelectAll,
   handleSelectById,

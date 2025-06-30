@@ -1,3 +1,5 @@
+// REPOSITORY - The actual DB functions
+
 // Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
 const { DatabaseSync } = require("node:sqlite");
 
@@ -10,7 +12,7 @@ database.exec(
 
 // prepare the function
 const handleInsert = database.prepare(
-  "INSERT INTO games ( name, price) VALUES (?, ?)"
+  "INSERT INTO games (name, price) VALUES (?, ?)"
 );
 
 const handleSelectAll = database.prepare("SELECT * FROM games ORDER BY id");
@@ -26,10 +28,11 @@ const handleUpdate = database.prepare(
 // // Add all data again
 // const { games } = require("./seed/gamesSeed.js");
 // for (const game of games) {
-//   handleInsert.run(game.id, game.name, game.price);
+//   handleInsert.run(game.name, game.price);
 // }
 
-// To run the functions, .all() (or .get() if only one result is expected) is used when data is returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
+// To run the functions, .all() (or .get() if only one result is expected) is used when data is
+// returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
 module.exports = {
   handleInsert,
   handleSelectAll,

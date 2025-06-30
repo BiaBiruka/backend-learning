@@ -5,7 +5,7 @@ const { gamesRouter } = require("./src/routes/gamesRoutes");
 const app = express();
 app.use(express.json());
 
-const port = 3000;
+const port = 5000;
 
 app.listen(port, () =>
   console.log(`Server successfully running in port ${port}.`)

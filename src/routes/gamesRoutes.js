@@ -1,3 +1,4 @@
+// ROUTES - The existing routes with their methods and controllers they call
 const express = require("express");
 const GamesController = require("../controllers/gamesController");
 

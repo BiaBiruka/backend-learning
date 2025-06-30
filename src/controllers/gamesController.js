@@ -1,3 +1,4 @@
+// CONTROLLER - "Breaks" request params, calls the service and deals with return status/messages
 const { GamesService } = require("../services/gamesService");
 
 class GamesController {
