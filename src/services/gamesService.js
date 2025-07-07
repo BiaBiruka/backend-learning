@@ -27,7 +27,6 @@ class GamesService {
 
   async addGame(name, price) {
     const game = await handleSelectByName.get(name);
-
     if (game) {
       throw new Error(`'${game.name}' already exists!`);
     }
