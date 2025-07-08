@@ -13,8 +13,24 @@ database.exec(
   ) STRICT`
 );
 
-const handleInsertStock = database.prepare(
+const handleInsertStockItem = database.prepare(
   "INSERT INTO stock (game_id, stock, reorder_point, needs_reestock, ordered_reestock) VALUES (?, ?, ?, ?, ?)"
+);
+
+const handleUpdateStockItem = database.prepare(
+  "UPDATE stock SET stock = ?, needs_reestock = ? WHERE game_id = ?"
+);
+
+const handleDeleteStockItem = database.prepare(
+  "DELETE FROM stock WHERE game_id = ?"
+);
+
+const fetchGameStock = database.prepare(
+  "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id WHERE game_id = ?"
+);
+
+const fetchFulltock = database.prepare(
+  "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id"
 );
 
 // let count = 0;
@@ -24,5 +40,9 @@ const handleInsertStock = database.prepare(
 // }
 
 module.exports = {
-  handleInsertStock,
+  handleInsertStockItem,
+  handleUpdateStockItem,
+  handleDeleteStockItem,
+  fetchGameStock,
+  fetchFulltock,
 };

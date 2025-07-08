@@ -15,12 +15,16 @@ const handleInsert = database.prepare(
   "INSERT INTO games (name, price) VALUES (?, ?)"
 );
 
-const handleSelectAll = database.prepare("SELECT * FROM games ORDER BY id");
+const handleSelectAll = database.prepare(
+  "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id  ORDER BY id"
+);
 
-const handleSelectById = database.prepare("SELECT * FROM games WHERE id = ?");
+const handleSelectById = database.prepare(
+  "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE id = ?"
+);
 
 const handleSelectByName = database.prepare(
-  "SELECT * FROM games WHERE LOWER(name) = LOWER(?)"
+  "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE LOWER(name) = LOWER(?)"
 );
 
 const handleDelete = database.prepare("DELETE FROM games WHERE id = ?");
