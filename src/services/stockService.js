@@ -8,7 +8,7 @@ class StockService {
   async fetchFullStock() {
     const requestResult = await fetchFulltock.all();
     if (requestResult.length < 1) {
-      throw new Error(`No stock found.`);
+      throw new Error(`404 - No stock found.`);
     }
     return requestResult;
   }
@@ -16,7 +16,7 @@ class StockService {
   async fetchGameStock(gameId) {
     const requestResult = await fetchGameStock.get(gameId);
     if (!requestResult) {
-      throw new Error(`Stock for informed game not found.`);
+      throw new Error(`404 - Stock for informed game not found.`);
     }
     return requestResult;
   }
@@ -29,7 +29,7 @@ class StockService {
 
       await handleUpdateStockItem.run(newStock, needsReestock, gameId);
     } else {
-      throw new Error(`Stock for informed game not found.`);
+      throw new Error(`404 - Stock for informed game not found.`);
     }
   }
 }
