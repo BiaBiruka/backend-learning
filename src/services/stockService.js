@@ -22,10 +22,7 @@ class StockService {
   }
 
   async updateStock(newStock, gameId) {
-    console.log({ newStock, gameId });
-
     const gameStock = await fetchGameStock.get(gameId);
-    console.log(gameStock);
 
     if (gameStock) {
       const needsReestock = newStock <= gameStock.reorder_point ? 1 : 0;
