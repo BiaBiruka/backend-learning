@@ -1,4 +1,5 @@
 // SERVICE - Calls the function to interact with DB and deals with business rules
+const AppError = require("../../AppError");
 const {
   handleSelectAll,
   handleSelectById,
@@ -16,7 +17,7 @@ class GamesService {
   async fetchAllGames() {
     const requestResult = await handleSelectAll.all();
     if (requestResult.length < 1) {
-      throw new Error(`404 - No games found.`);
+      throw new AppError("No games found.", 404);
     }
     return requestResult;
   }
@@ -24,7 +25,7 @@ class GamesService {
   async fetchGameById(id) {
     const requestResult = await handleSelectById.get(id);
     if (!requestResult) {
-      throw new Error(`404 - Game not found.`);
+      throw new AppError("Game not found.", 404);
     }
     return requestResult;
   }
@@ -32,18 +33,16 @@ class GamesService {
   async addGame(name, price, currentStock, reorderPoint, orderedReestock) {
     const game = await handleSelectByName.get(name);
     if (game) {
-      throw new Error(`409 - '${game.name}' already exists!`);
+      throw new AppError(`'${game.name}' already exists!`, 409);
     }
     const requestResult = await handleInsert.run(name, price);
 
     // Add stock entry
     const gameId = requestResult.lastInsertRowid;
-    const needsReestock = reorderPoint >= currentStock ? 1 : 0;
     await handleInsertStockItem.run(
       gameId,
       currentStock,
       reorderPoint,
-      needsReestock,
       orderedReestock
     );
   }
@@ -54,7 +53,7 @@ class GamesService {
     if (game) {
       await handleUpdate.run(newPrice, id);
     } else {
-      throw new Error("404 - Game not found.");
+      throw new AppError("Game not found.", 404);
     }
   }
 
@@ -65,7 +64,7 @@ class GamesService {
       await handleDeleteStockItem.run(id);
       await handleDelete.run(id);
     } else {
-      throw new Error("404 - Game not found.");
+      throw new AppError("Game not found.", 404);
     }
   }
 }

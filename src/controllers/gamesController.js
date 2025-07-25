@@ -3,88 +3,64 @@ const { GamesService } = require("../services/gamesService");
 
 class GamesController {
   async fetchAllGames(_, res) {
-    try {
-      const gameServiceInstance = new GamesService();
+    const gameServiceInstance = new GamesService();
 
-      const result = await gameServiceInstance.fetchAllGames();
-      return res
-        .status(200)
-        .json({ message: `${result.length} result(s) found.`, data: result });
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
-    }
+    const result = await gameServiceInstance.fetchAllGames();
+    return res
+      .status(200)
+      .json({ message: `${result.length} result(s) found.`, data: result });
   }
 
   async fetchGameByQuery(req, res) {
-    try {
-      const gameServiceInstance = new GamesService();
-      const { id } = req.query;
+    const gameServiceInstance = new GamesService();
+    const { id } = req.query;
 
-      const result = await gameServiceInstance.fetchGameById(id);
-      return res.status(200).json(result);
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
-    }
+    const result = await gameServiceInstance.fetchGameById(id);
+    return res.status(200).json(result);
   }
 
   async fetchGameByParam(req, res) {
-    try {
-      const gameServiceInstance = new GamesService();
-      const { id } = req.params;
+    const gameServiceInstance = new GamesService();
+    const { id } = req.params;
 
-      const result = await gameServiceInstance.fetchGameById(id);
-      return res.status(200).json(result);
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
-    }
+    const result = await gameServiceInstance.fetchGameById(id);
+    return res.status(200).json(result);
   }
 
   async addGame(req, res) {
-    try {
-      const gameServiceInstance = new GamesService();
-      const { name, price, currentStock, reorderPoint, orderedReestock } =
-        req.body;
-      await gameServiceInstance.addGame(
-        name,
-        price,
-        currentStock,
-        reorderPoint,
-        orderedReestock
-      );
+    const gameServiceInstance = new GamesService();
+    const { name, price, currentStock, reorderPoint, orderedReestock } =
+      req.body;
+    await gameServiceInstance.addGame(
+      name,
+      price,
+      currentStock,
+      reorderPoint,
+      orderedReestock
+    );
 
-      return res.status(200).json({ message: "Game added successfully" });
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
-    }
+    return res.status(200).json({ message: "Game added successfully" });
   }
 
   async editGame(req, res) {
-    try {
-      const gameServiceInstance = new GamesService();
-      const { id } = req.params;
-      const { newPrice } = req.body;
+    const gameServiceInstance = new GamesService();
+    const { id } = req.params;
+    const { newPrice } = req.body;
 
-      await gameServiceInstance.editGame(newPrice, id);
-      return res.status(200).json({
-        message: "Game price updated successfully.",
-      });
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
-    }
+    await gameServiceInstance.editGame(newPrice, id);
+    return res.status(200).json({
+      message: "Game price updated successfully.",
+    });
   }
 
   async deleteGame(req, res) {
-    try {
-      const gameServiceInstance = new GamesService();
-      const { id } = req.params;
+    const gameServiceInstance = new GamesService();
+    const { id } = req.params;
 
-      await gameServiceInstance.deleteGame(id);
-      return res.status(200).json({
-        message: "Game deleted successfully.",
-      });
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
-    }
+    await gameServiceInstance.deleteGame(id);
+    return res.status(200).json({
+      message: "Game deleted successfully.",
+    });
   }
 }
 

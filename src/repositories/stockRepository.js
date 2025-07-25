@@ -7,18 +7,17 @@ database.exec(
     game_id INTEGER PRIMARY KEY,
     stock INTEGER,
     reorder_point INTEGER,
-    needs_reestock INTEGER CHECK (needs_reestock IN (0,1)),
     ordered_reestock INTEGER CHECK (ordered_reestock IN (0,1)),
     FOREIGN KEY (game_id) REFERENCES games(id)
   ) STRICT`
 );
 
 const handleInsertStockItem = database.prepare(
-  "INSERT INTO stock (game_id, stock, reorder_point, needs_reestock, ordered_reestock) VALUES (?, ?, ?, ?, ?)"
+  "INSERT INTO stock (game_id, stock, reorder_point, ordered_reestock) VALUES (?, ?, ?, ?)"
 );
 
 const handleUpdateStockItem = database.prepare(
-  "UPDATE stock SET stock = ?, needs_reestock = ? WHERE game_id = ?"
+  "UPDATE stock SET stock = ? WHERE game_id = ?"
 );
 
 const handleDeleteStockItem = database.prepare(
@@ -35,7 +34,7 @@ const fetchFulltock = database.prepare(
 
 // let count = 0;
 // for (let i = 1; i < 31; i += 1) {
-//   handleInsertStock.run(i, 5, 3, 0, 0);
+//   handleInsertStockItem.run(i, 5, 3, 0);
 //   count += 1;
 // }
 
