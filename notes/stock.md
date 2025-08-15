@@ -1,5 +1,3 @@
-<!-- Need to translate and convert that to .md -->
-
 # Stock table: a normalization dilemma
 
 ## The problem

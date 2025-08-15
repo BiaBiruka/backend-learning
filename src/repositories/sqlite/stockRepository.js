@@ -1,6 +1,5 @@
 const { DatabaseSync } = require("node:sqlite");
-
-const database = new DatabaseSync("./db.sql");
+const database = new DatabaseSync("./sqlitedb.sql");
 
 database.exec(
   `CREATE TABLE IF NOT EXISTS stock(

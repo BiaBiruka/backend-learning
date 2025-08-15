@@ -7,11 +7,11 @@ const {
   handleUpdate,
   handleDelete,
   handleSelectByName,
-} = require("../repositories/gamesRepository");
+} = require("../repositories/sqlite/gamesRepository");
 const {
   handleInsertStockItem,
   handleDeleteStockItem,
-} = require("../repositories/stockRepository");
+} = require("../repositories/sqlite/stockRepository");
 
 class GamesService {
   async fetchAllGames() {

@@ -4,7 +4,7 @@
 const { DatabaseSync } = require("node:sqlite");
 
 // DBs can be stored in file or memory. If using in file should input file path here, else use :memory:
-const database = new DatabaseSync("./db.sql");
+const database = new DatabaseSync("./sqlitedb.sql");
 
 database.exec(
   `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`

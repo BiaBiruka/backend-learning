@@ -3,7 +3,7 @@ const {
   handleUpdateStockItem,
   fetchGameStock,
   fetchFulltock,
-} = require("../repositories/stockRepository");
+} = require("../repositories/sqlite/stockRepository");
 
 class StockService {
   async fetchFullStock() {
