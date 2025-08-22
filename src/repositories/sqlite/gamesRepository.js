@@ -1,11 +1,6 @@
 // REPOSITORY - The actual DB functions
 
 // Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
-const { DatabaseSync } = require("node:sqlite");
-
-// DBs can be stored in file or memory. If using in file should input file path here, else use :memory:
-const database = new DatabaseSync("./sqlitedb.sql");
-
 database.exec(
   `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
 );

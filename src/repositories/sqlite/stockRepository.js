@@ -1,6 +1,3 @@
-const { DatabaseSync } = require("node:sqlite");
-const database = new DatabaseSync("./sqlitedb.sql");
-
 database.exec(
   `CREATE TABLE IF NOT EXISTS stock(
     game_id INTEGER PRIMARY KEY,

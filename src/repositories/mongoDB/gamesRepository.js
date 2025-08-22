@@ -1,14 +1,52 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
-async function main() {
-  const uri =
-    "mongodb+srv://backend-learning:nNucycs12ZtT8pSd@backend-learning.vbv3htr.mongodb.net/?retryWrites=true&w=majority&appName=backend-learning";
-
-  const client = new MongoClient(uri);
-
-  await client.connect();
-
-  await client.close();
+async function handleInsert(client, gameName, gamePrice) {
+  await client
+    .db("backend-learning")
+    .collection("games")
+    .insertOne({ name: gameName, price: gamePrice });
 }
 
-main().catch(console.error);
+async function handleSelectAll(client) {
+  const res = await client
+    .db("backend-learning")
+    .collection("games")
+    .find({})
+    .toArray();
+  return res;
+}
+
+async function handleSelectById(client, gameId) {
+  const res = await client
+    .db("backend-learning")
+    .collection("games")
+    .findOne({ _id: new ObjectId(gameId) });
+  return res;
+}
+
+async function handleSelectByName(client, gameName) {
+  const res = await client
+    .db("backend-learning")
+    .collection("games")
+    .findOne({ name: gameName });
+  return res;
+}
+
+async function handleDelete(client, gameId) {
+  await client
+    .db("backend-learning")
+    .collection("games")
+    .deleteOne({ _id: new ObjectId(gameId) });
+}
+
+async function handleUpdate(client, newPrice, gameId) {
+  await client
+    .db("backend-learning")
+    .collection("games")
+    .updateOne({ _id: new ObjectId(gameId) }, { $set: { price: newPrice } });
+}
+
+// async function handleInserAll(client) {
+//   const { games } = require("../seed/gamesSeed.js");
+//   await client.db("backend-learning").collection("games").insertMany(games);
+// }
