@@ -13,7 +13,8 @@ const port = 5000;
 app.listen(port, () => {
   console.log(`Server successfully running in port ${port}.`);
 });
-// TODO - Insert all again route
+
+// TODO - Insert all again routes
 app.use("/games", gamesRouter);
 app.use("/stock", stockRouter);
 
@@ -24,6 +25,6 @@ app.use((error, _, res, __) => {
     });
   }
   return res.status(500).json({
-    message: "Server error",
+    message: error.message || "Server error",
   });
 });

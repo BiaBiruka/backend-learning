@@ -1,46 +1,61 @@
 // REPOSITORY - The actual DB functions
+const { DatabaseSync } = require("node:sqlite");
+const database = new DatabaseSync("./sqlitedb.sql");
 
 // Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
 database.exec(
   `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
 );
 
-// prepare the function
-const handleInsert = database.prepare(
-  "INSERT INTO games (name, price) VALUES (?, ?)"
-);
+class GamesRepository {
+  // To run the functions, .all() (or .get() if only one result is expected) is used when data is
+  // returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
+  handleSelectAll = () => {
+    return database
+      .prepare(
+        "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id  ORDER BY id"
+      )
+      .all();
+  };
 
-const handleSelectAll = database.prepare(
-  "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id  ORDER BY id"
-);
+  handleInsert = (game) => {
+    return database
+      .prepare("INSERT INTO games (name, price) VALUES (?, ?)")
+      .run(game.name, game.price);
+  };
 
-const handleSelectById = database.prepare(
-  "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE id = ?"
-);
+  handleSelectById = (id) => {
+    return database
+      .prepare(
+        "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE id = ?"
+      )
+      .get(id);
+  };
 
-const handleSelectByName = database.prepare(
-  "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE LOWER(name) = LOWER(?)"
-);
+  handleSelectByName = (name) => {
+    return database
+      .prepare(
+        "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE LOWER(name) = LOWER(?)"
+      )
+      .get(name);
+  };
 
-const handleDelete = database.prepare("DELETE FROM games WHERE id = ?");
+  handleDelete = (id) => {
+    return database.prepare("DELETE FROM games WHERE id = ?").run(id);
+  };
 
-const handleUpdate = database.prepare(
-  "UPDATE games SET price = ? WHERE id = ?"
-);
+  handleUpdate = (gameData) => {
+    return database
+      .prepare("UPDATE games SET price = ? WHERE id = ?")
+      .run(gameData.newPrice, gameData.id);
+  };
+}
 
 // // Add all data again
-// const { games } = require("./seed/gamesSeed.js");
+// const { games } = require("../seed/gamesSeed.js");
 // for (const game of games) {
+//   console.log(game);
 //   handleInsert.run(game.name, game.price);
 // }
 
-// To run the functions, .all() (or .get() if only one result is expected) is used when data is
-// returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
-module.exports = {
-  handleInsert,
-  handleSelectAll,
-  handleSelectById,
-  handleSelectByName,
-  handleDelete,
-  handleUpdate,
-};
+module.exports = GamesRepository;

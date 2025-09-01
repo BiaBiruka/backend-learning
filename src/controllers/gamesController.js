@@ -1,9 +1,11 @@
 // CONTROLLER - "Breaks" request params, calls the service and deals with return status/messages
+const GamesRepository = require("../repositories/sqlite/gamesRepository");
 const { GamesService } = require("../services/gamesService");
 
 class GamesController {
   async fetchAllGames(_, res) {
-    const gameServiceInstance = new GamesService();
+    const gamesRepository = new GamesRepository();
+    const gameServiceInstance = new GamesService({ gamesRepository });
 
     const result = await gameServiceInstance.fetchAllGames();
     return res
@@ -12,7 +14,8 @@ class GamesController {
   }
 
   async fetchGameByQuery(req, res) {
-    const gameServiceInstance = new GamesService();
+    const gamesRepository = new GamesRepository();
+    const gameServiceInstance = new GamesService({ gamesRepository });
     const { id } = req.query;
 
     const result = await gameServiceInstance.fetchGameById(id);
@@ -20,7 +23,8 @@ class GamesController {
   }
 
   async fetchGameByParam(req, res) {
-    const gameServiceInstance = new GamesService();
+    const gamesRepository = new GamesRepository();
+    const gameServiceInstance = new GamesService({ gamesRepository });
     const { id } = req.params;
 
     const result = await gameServiceInstance.fetchGameById(id);
@@ -28,7 +32,8 @@ class GamesController {
   }
 
   async addGame(req, res) {
-    const gameServiceInstance = new GamesService();
+    const gamesRepository = new GamesRepository();
+    const gameServiceInstance = new GamesService({ gamesRepository });
     const { name, price, currentStock, reorderPoint, orderedReestock } =
       req.body;
     await gameServiceInstance.addGame(
@@ -43,7 +48,8 @@ class GamesController {
   }
 
   async editGame(req, res) {
-    const gameServiceInstance = new GamesService();
+    const gamesRepository = new GamesRepository();
+    const gameServiceInstance = new GamesService({ gamesRepository });
     const { id } = req.params;
     const { newPrice } = req.body;
 
@@ -54,7 +60,8 @@ class GamesController {
   }
 
   async deleteGame(req, res) {
-    const gameServiceInstance = new GamesService();
+    const gamesRepository = new GamesRepository();
+    const gameServiceInstance = new GamesService({ gamesRepository });
     const { id } = req.params;
 
     await gameServiceInstance.deleteGame(id);

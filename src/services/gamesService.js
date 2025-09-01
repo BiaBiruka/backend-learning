@@ -14,8 +14,12 @@ const {
 } = require("../repositories/sqlite/stockRepository");
 
 class GamesService {
+  constructor({ gamesRepository }) {
+    this.gamesRepository = gamesRepository;
+  }
+
   async fetchAllGames() {
-    const requestResult = await handleSelectAll.all();
+    const requestResult = await this.gamesRepository.handleSelectAll();
     if (requestResult.length < 1) {
       throw new AppError("No games found.", 404);
     }
@@ -23,7 +27,7 @@ class GamesService {
   }
 
   async fetchGameById(id) {
-    const requestResult = await handleSelectById.get(id);
+    const requestResult = await this.gamesRepository.handleSelectById(id);
     if (!requestResult) {
       throw new AppError("Game not found.", 404);
     }
@@ -31,13 +35,17 @@ class GamesService {
   }
 
   async addGame(name, price, currentStock, reorderPoint, orderedReestock) {
-    const game = await handleSelectByName.get(name);
+    const game = await this.gamesRepository.handleSelectByName(name);
     if (game) {
       throw new AppError(`'${game.name}' already exists!`, 409);
     }
-    const requestResult = await handleInsert.run(name, price);
+    const requestResult = await this.gamesRepository.handleInsert({
+      name,
+      price,
+    });
 
     // Add stock entry
+    // TODO: change this once I have stock repo on new pattern
     const gameId = requestResult.lastInsertRowid;
     await handleInsertStockItem.run(
       gameId,
@@ -48,21 +56,22 @@ class GamesService {
   }
 
   async editGame(newPrice, id) {
-    const game = await handleSelectById.get(id);
+    const game = await this.gamesRepository.handleSelectById(id);
 
     if (game) {
-      await handleUpdate.run(newPrice, id);
+      await this.gamesRepository.handleUpdate({ newPrice, id });
     } else {
       throw new AppError("Game not found.", 404);
     }
   }
 
   async deleteGame(id) {
-    const game = await handleSelectById.get(id);
+    const game = await this.gamesRepository.handleSelectById(id);
 
     if (game) {
+      // TODO: change this once I have stock repo on new pattern
       await handleDeleteStockItem.run(id);
-      await handleDelete.run(id);
+      await this.gamesRepository.handleDelete(id);
     } else {
       throw new AppError("Game not found.", 404);
     }
