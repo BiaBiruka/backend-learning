@@ -1,21 +1,14 @@
 // SERVICE - Calls the function to interact with DB and deals with business rules
 const AppError = require("../../AppError");
 const {
-  handleSelectAll,
-  handleSelectById,
-  handleInsert,
-  handleUpdate,
-  handleDelete,
-  handleSelectByName,
-} = require("../repositories/sqlite/gamesRepository");
-const {
   handleInsertStockItem,
   handleDeleteStockItem,
 } = require("../repositories/sqlite/stockRepository");
 
 class GamesService {
-  constructor({ gamesRepository }) {
+  constructor({ gamesRepository, stockRepository }) {
     this.gamesRepository = gamesRepository;
+    this.stockRepository = stockRepository;
   }
 
   async fetchAllGames() {
@@ -45,14 +38,13 @@ class GamesService {
     });
 
     // Add stock entry
-    // TODO: change this once I have stock repo on new pattern
     const gameId = requestResult.lastInsertRowid;
-    await handleInsertStockItem.run(
+    await this.stockRepository.handleInsertStockItem({
       gameId,
       currentStock,
       reorderPoint,
-      orderedReestock
-    );
+      orderedReestock,
+    });
   }
 
   async editGame(newPrice, id) {
@@ -70,7 +62,7 @@ class GamesService {
 
     if (game) {
       // TODO: change this once I have stock repo on new pattern
-      await handleDeleteStockItem.run(id);
+      await this.stockRepository.handleDeleteStockItem(id);
       await this.gamesRepository.handleDelete(id);
     } else {
       throw new AppError("Game not found.", 404);

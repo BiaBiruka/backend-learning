@@ -1,11 +1,16 @@
 // CONTROLLER - "Breaks" request params, calls the service and deals with return status/messages
 const GamesRepository = require("../repositories/sqlite/gamesRepository");
+const StockRepository = require("../repositories/sqlite/stockRepository");
 const { GamesService } = require("../services/gamesService");
 
 class GamesController {
   async fetchAllGames(_, res) {
     const gamesRepository = new GamesRepository();
-    const gameServiceInstance = new GamesService({ gamesRepository });
+    const stockRepository = new StockRepository();
+    const gameServiceInstance = new GamesService({
+      gamesRepository,
+      stockRepository,
+    });
 
     const result = await gameServiceInstance.fetchAllGames();
     return res
@@ -15,7 +20,11 @@ class GamesController {
 
   async fetchGameByQuery(req, res) {
     const gamesRepository = new GamesRepository();
-    const gameServiceInstance = new GamesService({ gamesRepository });
+    const stockRepository = new StockRepository();
+    const gameServiceInstance = new GamesService({
+      gamesRepository,
+      stockRepository,
+    });
     const { id } = req.query;
 
     const result = await gameServiceInstance.fetchGameById(id);
@@ -24,7 +33,11 @@ class GamesController {
 
   async fetchGameByParam(req, res) {
     const gamesRepository = new GamesRepository();
-    const gameServiceInstance = new GamesService({ gamesRepository });
+    const stockRepository = new StockRepository();
+    const gameServiceInstance = new GamesService({
+      gamesRepository,
+      stockRepository,
+    });
     const { id } = req.params;
 
     const result = await gameServiceInstance.fetchGameById(id);
@@ -33,7 +46,11 @@ class GamesController {
 
   async addGame(req, res) {
     const gamesRepository = new GamesRepository();
-    const gameServiceInstance = new GamesService({ gamesRepository });
+    const stockRepository = new StockRepository();
+    const gameServiceInstance = new GamesService({
+      gamesRepository,
+      stockRepository,
+    });
     const { name, price, currentStock, reorderPoint, orderedReestock } =
       req.body;
     await gameServiceInstance.addGame(
@@ -49,7 +66,11 @@ class GamesController {
 
   async editGame(req, res) {
     const gamesRepository = new GamesRepository();
-    const gameServiceInstance = new GamesService({ gamesRepository });
+    const stockRepository = new StockRepository();
+    const gameServiceInstance = new GamesService({
+      gamesRepository,
+      stockRepository,
+    });
     const { id } = req.params;
     const { newPrice } = req.body;
 
@@ -61,7 +82,11 @@ class GamesController {
 
   async deleteGame(req, res) {
     const gamesRepository = new GamesRepository();
-    const gameServiceInstance = new GamesService({ gamesRepository });
+    const stockRepository = new StockRepository();
+    const gameServiceInstance = new GamesService({
+      gamesRepository,
+      stockRepository,
+    });
     const { id } = req.params;
 
     await gameServiceInstance.deleteGame(id);

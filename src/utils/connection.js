@@ -1,12 +1,16 @@
-const { GamesRepository } = require("../repositories/sqlite/gamesRepository");
-
 // Returns the correct repository
-const repository = async () => {
+const handleFetchDatabase = () => {
+  console.log(process.env.DATABASE);
+
   if (process.env.DATABASE === "sqlite") {
-    return new GamesRepository();
+    const { DatabaseSync } = require("node:sqlite");
+    const database = new DatabaseSync("./sqlitedb.sql");
+    return database;
   } else if (process.env.DATABASE === "mongodb") {
-    // const uri = process.env.MONGO_URL;
-    // const client = new MongoClient(uri);
-    // return client.db("backend-learning");
+    const uri = process.env.MONGO_URL;
+    const client = new MongoClient(uri);
+    return client.db("backend-learning");
   }
 };
+
+module.exports = { handleFetchDatabase };

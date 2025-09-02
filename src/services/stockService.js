@@ -1,13 +1,12 @@
 const AppError = require("../../AppError");
-const {
-  handleUpdateStockItem,
-  fetchGameStock,
-  fetchFulltock,
-} = require("../repositories/sqlite/stockRepository");
 
 class StockService {
+  constructor({ stockRepository }) {
+    this.stockRepository = stockRepository;
+  }
+
   async fetchFullStock() {
-    const requestResult = await fetchFulltock.all();
+    const requestResult = await this.stockRepository.fetchFullStock();
     if (requestResult.length < 1) {
       throw new AppError("No stock found.", 404);
     }
@@ -23,7 +22,7 @@ class StockService {
   }
 
   async fetchGameStock(gameId) {
-    const requestResult = await fetchGameStock.get(gameId);
+    const requestResult = await this.stockRepository.fetchGameStock(gameId);
     if (!requestResult) {
       throw new AppError("Stock for informed game not found.", 404);
     }
@@ -36,10 +35,10 @@ class StockService {
   }
 
   async updateStock(newStock, gameId) {
-    const gameStock = await fetchGameStock.get(gameId);
+    const gameStock = await this.stockRepository.fetchGameStock(gameId);
 
     if (gameStock) {
-      await handleUpdateStockItem.run(newStock, gameId);
+      await this.stockRepository.handleUpdateStockItem({ newStock, gameId });
     } else {
       throw new AppError("Stock for informed game not found.", 404);
     }

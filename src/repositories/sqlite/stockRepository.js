@@ -1,35 +1,55 @@
-const { DatabaseSync } = require("node:sqlite");
-const database = new DatabaseSync("./sqlitedb.sql");
+const { handleFetchDatabase } = require("../../utils/connection");
+const database = handleFetchDatabase();
+class StockRepository {
+  handleInsertStockItem = (stock) => {
+    return database
+      .prepare(
+        "INSERT INTO stock (game_id, stock, reorder_point, ordered_reestock) VALUES (?, ?, ?, ?)"
+      )
+      .run(
+        stock.gameId,
+        stock.stock,
+        stock.reorderPoint,
+        stock.orderedReestock
+      );
+  };
 
-database.exec(
-  `CREATE TABLE IF NOT EXISTS stock(
-    game_id INTEGER PRIMARY KEY,
-    stock INTEGER,
-    reorder_point INTEGER,
-    ordered_reestock INTEGER CHECK (ordered_reestock IN (0,1)),
-    FOREIGN KEY (game_id) REFERENCES games(id)
-  ) STRICT`
-);
+  handleUpdateStockItem = ({ gameId, newStock }) => {
+    return database
+      .prepare("UPDATE stock SET stock = ? WHERE game_id = ?")
+      .run(newStock, gameId);
+  };
 
-const handleInsertStockItem = database.prepare(
-  "INSERT INTO stock (game_id, stock, reorder_point, ordered_reestock) VALUES (?, ?, ?, ?)"
-);
+  handleDeleteStockItem = (gameId) => {
+    return database.prepare("DELETE FROM stock WHERE game_id = ?").run(gameId);
+  };
 
-const handleUpdateStockItem = database.prepare(
-  "UPDATE stock SET stock = ? WHERE game_id = ?"
-);
+  fetchGameStock = (gameId) => {
+    return database
+      .prepare(
+        "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id WHERE game_id = ?"
+      )
+      .get(gameId);
+  };
 
-const handleDeleteStockItem = database.prepare(
-  "DELETE FROM stock WHERE game_id = ?"
-);
+  fetchFullStock = () => {
+    return database
+      .prepare(
+        "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id"
+      )
+      .all();
+  };
+}
 
-const fetchGameStock = database.prepare(
-  "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id WHERE game_id = ?"
-);
-
-const fetchFulltock = database.prepare(
-  "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id"
-);
+// database.exec(
+//   `CREATE TABLE IF NOT EXISTS stock(
+//     game_id INTEGER PRIMARY KEY,
+//     stock INTEGER,
+//     reorder_point INTEGER,
+//     ordered_reestock INTEGER CHECK (ordered_reestock IN (0,1)),
+//     FOREIGN KEY (game_id) REFERENCES games(id)
+//   ) STRICT`
+// );
 
 // let count = 0;
 // for (let i = 1; i < 31; i += 1) {
@@ -37,10 +57,4 @@ const fetchFulltock = database.prepare(
 //   count += 1;
 // }
 
-module.exports = {
-  handleInsertStockItem,
-  handleUpdateStockItem,
-  handleDeleteStockItem,
-  fetchGameStock,
-  fetchFulltock,
-};
+module.exports = StockRepository;

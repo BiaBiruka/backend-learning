@@ -1,9 +1,10 @@
 // To run, need to use 'node app.js' (to keep watch of the changes, use 'node --watch app.js')
+require("dotenv/config");
+require("./src/utils/connection");
 const express = require("express");
 // require("express-async-errors");
 const { gamesRouter } = require("./src/routes/gamesRoutes");
 const { stockRouter } = require("./src/routes/stockRoutes");
-require("dotenv/config");
 
 const app = express();
 app.use(express.json());

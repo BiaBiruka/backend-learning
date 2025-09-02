@@ -1,11 +1,6 @@
 // REPOSITORY - The actual DB functions
-const { DatabaseSync } = require("node:sqlite");
-const database = new DatabaseSync("./sqlitedb.sql");
-
-// Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
-database.exec(
-  `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
-);
+const { handleFetchDatabase } = require("../../utils/connection");
+const database = handleFetchDatabase();
 
 class GamesRepository {
   // To run the functions, .all() (or .get() if only one result is expected) is used when data is
@@ -51,6 +46,10 @@ class GamesRepository {
   };
 }
 
+// // Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
+// database.exec(
+//   `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
+// );
 // // Add all data again
 // const { games } = require("../seed/gamesSeed.js");
 // for (const game of games) {
