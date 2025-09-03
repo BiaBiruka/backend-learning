@@ -8,7 +8,7 @@ class StockRepository {
       )
       .run(
         stock.gameId,
-        stock.stock,
+        stock.currentStock,
         stock.reorderPoint,
         stock.orderedReestock
       );

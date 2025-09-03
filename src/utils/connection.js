@@ -1,7 +1,7 @@
+const { MongoClient } = require("mongodb");
+
 // Returns the correct repository
 const handleFetchDatabase = () => {
-  console.log(process.env.DATABASE);
-
   if (process.env.DATABASE === "sqlite") {
     const { DatabaseSync } = require("node:sqlite");
     const database = new DatabaseSync("./sqlitedb.sql");

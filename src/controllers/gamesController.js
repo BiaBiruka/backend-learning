@@ -1,11 +1,11 @@
 // CONTROLLER - "Breaks" request params, calls the service and deals with return status/messages
-const GamesRepository = require("../repositories/sqlite/gamesRepository");
+const GamesRepository = require("../repositories/GamesRepository");
 const StockRepository = require("../repositories/sqlite/stockRepository");
 const { GamesService } = require("../services/gamesService");
 
 class GamesController {
   async fetchAllGames(_, res) {
-    const gamesRepository = new GamesRepository();
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
