@@ -15,7 +15,7 @@ app.listen(port, () => {
   console.log(`Server successfully running in port ${port}.`);
 });
 
-// TODO - Insert all again routes
+// TODO - "Insert all" routes (refreshDB)
 app.use("/games", gamesRouter);
 app.use("/stock", stockRouter);
 

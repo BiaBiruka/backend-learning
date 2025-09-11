@@ -19,7 +19,7 @@ class GamesController {
   }
 
   async fetchGameByQuery(req, res) {
-    const gamesRepository = new GamesRepository();
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -32,7 +32,7 @@ class GamesController {
   }
 
   async fetchGameByParam(req, res) {
-    const gamesRepository = new GamesRepository();
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -45,7 +45,7 @@ class GamesController {
   }
 
   async addGame(req, res) {
-    const gamesRepository = new GamesRepository();
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -65,7 +65,7 @@ class GamesController {
   }
 
   async editGame(req, res) {
-    const gamesRepository = new GamesRepository();
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -81,7 +81,7 @@ class GamesController {
   }
 
   async deleteGame(req, res) {
-    const gamesRepository = new GamesRepository();
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
