@@ -1,8 +1,10 @@
-const { handleFetchDatabase } = require("../../utils/connection");
-const database = handleFetchDatabase();
 class StockRepository {
+  constructor(dbConnection) {
+    this.dbConnection = dbConnection;
+  }
+
   handleInsertStockItem = (stock) => {
-    return database
+    return this.dbConnection
       .prepare(
         "INSERT INTO stock (game_id, stock, reorder_point, ordered_reestock) VALUES (?, ?, ?, ?)"
       )
@@ -15,17 +17,19 @@ class StockRepository {
   };
 
   handleUpdateStockItem = ({ gameId, newStock }) => {
-    return database
+    return this.dbConnection
       .prepare("UPDATE stock SET stock = ? WHERE game_id = ?")
       .run(newStock, gameId);
   };
 
   handleDeleteStockItem = (gameId) => {
-    return database.prepare("DELETE FROM stock WHERE game_id = ?").run(gameId);
+    return this.dbConnection
+      .prepare("DELETE FROM stock WHERE game_id = ?")
+      .run(gameId);
   };
 
   fetchGameStock = (gameId) => {
-    return database
+    return this.dbConnection
       .prepare(
         "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id WHERE game_id = ?"
       )
@@ -33,7 +37,7 @@ class StockRepository {
   };
 
   fetchFullStock = () => {
-    return database
+    return this.dbConnection
       .prepare(
         "SELECT g.name, s.* FROM stock s JOIN games g ON s.game_id = g.id"
       )
@@ -41,7 +45,7 @@ class StockRepository {
   };
 }
 
-// database.exec(
+// this.dbConnection.exec(
 //   `CREATE TABLE IF NOT EXISTS stock(
 //     game_id INTEGER PRIMARY KEY,
 //     stock INTEGER,

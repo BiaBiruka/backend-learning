@@ -1,15 +1,16 @@
-const { MongoClient } = require("mongodb");
+const { handleFetchSqliteInstance } = require("./sqliteConnection");
+const { handleFetchMongoInstance } = require("./mongoConnection");
 
 // Returns the correct repository
-const handleFetchDatabase = () => {
-  if (process.env.DATABASE === "sqlite") {
-    const { DatabaseSync } = require("node:sqlite");
-    const database = new DatabaseSync("./sqlitedb.sql");
-    return database;
-  } else if (process.env.DATABASE === "mongodb") {
-    const uri = process.env.MONGO_URL;
-    const client = new MongoClient(uri);
-    return client.db("backend-learning");
+const handleFetchDatabase = async () => {
+  try {
+    if (process.env.DATABASE === "sqlite") {
+      return handleFetchSqliteInstance();
+    } else if (process.env.DATABASE === "mongodb") {
+      return await handleFetchMongoInstance();
+    }
+  } catch (err) {
+    console.error("Failed to connect to database", err);
   }
 };
 

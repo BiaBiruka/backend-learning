@@ -1,12 +1,13 @@
 // REPOSITORY - The actual DB functions
-const { handleFetchDatabase } = require("../../utils/connection");
-const database = handleFetchDatabase();
-
 class GamesRepository {
+  constructor(dbConnection) {
+    this.dbConnection = dbConnection;
+  }
+
   // To run the functions, .all() (or .get() if only one result is expected) is used when data is
   // returned (select) and .run() to run a function that doesn't return data (update, delete, insert)
   handleSelectAll = () => {
-    return database
+    return this.dbConnection
       .prepare(
         "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id  ORDER BY id"
       )
@@ -14,13 +15,13 @@ class GamesRepository {
   };
 
   handleInsert = (game) => {
-    return database
+    return this.dbConnection
       .prepare("INSERT INTO games (name, price) VALUES (?, ?)")
       .run(game.name, game.price);
   };
 
   handleSelectById = (id) => {
-    return database
+    return this.dbConnection
       .prepare(
         "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE id = ?"
       )
@@ -28,7 +29,7 @@ class GamesRepository {
   };
 
   handleSelectByName = (name) => {
-    return database
+    return this.dbConnection
       .prepare(
         "SELECT g.*, s.stock FROM games g JOIN stock s ON s.game_id = g.id WHERE LOWER(name) = LOWER(?)"
       )
@@ -36,18 +37,18 @@ class GamesRepository {
   };
 
   handleDelete = (id) => {
-    return database.prepare("DELETE FROM games WHERE id = ?").run(id);
+    return this.dbConnection.prepare("DELETE FROM games WHERE id = ?").run(id);
   };
 
   handleUpdate = (gameData) => {
-    return database
+    return this.dbConnection
       .prepare("UPDATE games SET price = ? WHERE id = ?")
       .run(gameData.newPrice, gameData.id);
   };
 }
 
 // // Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
-// database.exec(
+// this.dbConnection.exec(
 //   `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
 // );
 // // Add all data again

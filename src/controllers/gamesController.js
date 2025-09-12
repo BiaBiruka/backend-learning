@@ -2,10 +2,12 @@
 const GamesRepository = require("../repositories/GamesRepository");
 const StockRepository = require("../repositories/sqlite/stockRepository");
 const { GamesService } = require("../services/gamesService");
+const { handleFetchDatabase } = require("../utils/connection");
 
 class GamesController {
   async fetchAllGames(_, res) {
-    const gamesRepository = GamesRepository.getRepository();
+    const dbConnection = await handleFetchDatabase();
+    const gamesRepository = GamesRepository.getRepository(dbConnection);
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -19,7 +21,8 @@ class GamesController {
   }
 
   async fetchGameByQuery(req, res) {
-    const gamesRepository = GamesRepository.getRepository();
+    const dbConnection = await handleFetchDatabase();
+    const gamesRepository = GamesRepository.getRepository(dbConnection);
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -32,7 +35,8 @@ class GamesController {
   }
 
   async fetchGameByParam(req, res) {
-    const gamesRepository = GamesRepository.getRepository();
+    const dbConnection = await handleFetchDatabase();
+    const gamesRepository = GamesRepository.getRepository(dbConnection);
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -45,7 +49,8 @@ class GamesController {
   }
 
   async addGame(req, res) {
-    const gamesRepository = GamesRepository.getRepository();
+    const dbConnection = await handleFetchDatabase();
+    const gamesRepository = GamesRepository.getRepository(dbConnection);
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -65,7 +70,8 @@ class GamesController {
   }
 
   async editGame(req, res) {
-    const gamesRepository = GamesRepository.getRepository();
+    const dbConnection = await handleFetchDatabase();
+    const gamesRepository = GamesRepository.getRepository(dbConnection);
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -81,7 +87,8 @@ class GamesController {
   }
 
   async deleteGame(req, res) {
-    const gamesRepository = GamesRepository.getRepository();
+    const dbConnection = await handleFetchDatabase();
+    const gamesRepository = GamesRepository.getRepository(dbConnection);
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
