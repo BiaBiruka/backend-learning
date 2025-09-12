@@ -7,9 +7,9 @@ const gamesRepos = {
 };
 
 class GamesRepository {
-  getRepository = () => {
+  getRepository = (dbConnection) => {
     const Repository = gamesRepos[process.env.DATABASE];
-    return new Repository();
+    return new Repository(dbConnection);
   };
 }
 

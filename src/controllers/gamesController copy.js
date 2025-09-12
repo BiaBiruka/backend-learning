@@ -2,12 +2,10 @@
 const GamesRepository = require("../repositories/GamesRepository");
 const StockRepository = require("../repositories/sqlite/stockRepository");
 const { GamesService } = require("../services/gamesService");
-const { handleConnection } = require("../utils/connection");
 
 class GamesController {
   async fetchAllGames(_, res) {
-    const dbConnection = await handleConnection();
-    const gamesRepository = GamesRepository.getRepository(dbConnection);
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,
@@ -47,10 +45,7 @@ class GamesController {
   }
 
   async addGame(req, res) {
-    console.log("hi");
-    const dbConnection = await handleConnection();
-    const gamesRepository = GamesRepository.getRepository(dbConnection);
-
+    const gamesRepository = GamesRepository.getRepository();
     const stockRepository = new StockRepository();
     const gameServiceInstance = new GamesService({
       gamesRepository,

@@ -1,5 +1,5 @@
-const { handleFetchDatabase } = require("../../utils/connection");
-const database = handleFetchDatabase();
+const { handleConnection } = require("../../utils/connection");
+const database = handleConnection();
 class StockRepository {
   handleInsertStockItem = (stock) => {
     return database

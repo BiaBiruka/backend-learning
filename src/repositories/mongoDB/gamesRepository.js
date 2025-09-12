@@ -1,45 +1,51 @@
 const { ObjectId } = require("mongodb");
-const { handleFetchDatabase } = require("../../utils/connection");
-const database = handleFetchDatabase();
 
 class GamesRepository {
+  constructor(database) {
+    this.database = database;
+  }
+
   async handleInsert(gameName, gamePrice) {
-    await database
+    await this.database
       .collection("games")
       .insertOne({ name: gameName, price: gamePrice });
   }
 
   async handleSelectAll() {
     console.log("select all mongo");
-    const res = await database.collection("games").find({}).toArray();
+    const res = await this.database.collection("games").find({}).toArray();
     return res;
   }
 
   async handleSelectById(gameId) {
-    const res = await database
+    const res = await this.database
       .collection("games")
       .findOne({ _id: new ObjectId(gameId) });
     return res;
   }
 
   async handleSelectByName(gameName) {
-    const res = await database.collection("games").findOne({ name: gameName });
+    const res = await this.database
+      .collection("games")
+      .findOne({ name: gameName });
     return res;
   }
 
   async handleDelete(gameId) {
-    await database.collection("games").deleteOne({ _id: new ObjectId(gameId) });
+    await this.database
+      .collection("games")
+      .deleteOne({ _id: new ObjectId(gameId) });
   }
 
   async handleUpdate(newPrice, gameId) {
-    await database
+    await this.database
       .collection("games")
       .updateOne({ _id: new ObjectId(gameId) }, { $set: { price: newPrice } });
   }
 
   // async handleInserAll(database) {
   //   const { games } = require("../seed/gamesSeed.js");
-  //   await database.db("backend-learning").collection("games").insertMany(games);
+  //   await this.database.db("backend-learning").collection("games").insertMany(games);
   // }
 }
 

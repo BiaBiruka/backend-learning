@@ -32,19 +32,16 @@ class GamesService {
     if (game) {
       throw new AppError(`'${game.name}' already exists!`, 409);
     }
-    const requestResult = await this.gamesRepository.handleInsert({
-      name,
-      price,
-    });
+    const requestResult = await this.gamesRepository.handleInsert(name, price);
 
-    // Add stock entry
-    const gameId = requestResult.lastInsertRowid;
-    await this.stockRepository.handleInsertStockItem({
-      gameId,
-      currentStock,
-      reorderPoint,
-      orderedReestock,
-    });
+    // // Add stock entry
+    // const gameId = requestResult.lastInsertRowid;
+    // await this.stockRepository.handleInsertStockItem({
+    //   gameId,
+    //   currentStock,
+    //   reorderPoint,
+    //   orderedReestock,
+    // });
   }
 
   async editGame(newPrice, id) {

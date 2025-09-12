@@ -1,0 +1,31 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "name": "Attach Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+        },
+        {
+            "name": "Debug Jest Tests",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "test:dev"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+          }
+
+    ]
+}

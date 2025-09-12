@@ -1,6 +1,6 @@
 // REPOSITORY - The actual DB functions
-const { handleFetchDatabase } = require("../../utils/connection");
-const database = handleFetchDatabase();
+const { handleConnection } = require("../../utils/connection");
+const database = handleConnection();
 
 class GamesRepository {
   // To run the functions, .all() (or .get() if only one result is expected) is used when data is
