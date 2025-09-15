@@ -72,7 +72,6 @@ class GamesRepository {
   }
 
   async handleSelectByName(gameName) {
-    // TODO: case sensitive search
     const res = await this.dbConnection
       .collection("games")
       .aggregate([
