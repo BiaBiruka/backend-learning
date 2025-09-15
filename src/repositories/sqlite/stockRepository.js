@@ -16,10 +16,10 @@ class StockRepository {
       );
   };
 
-  handleUpdateStockItem = ({ gameId, newStock }) => {
+  handleUpdateStockItem = (stock) => {
     return this.dbConnection
       .prepare("UPDATE stock SET stock = ? WHERE game_id = ?")
-      .run(newStock, gameId);
+      .run(stock.newStock, stock.gameId);
   };
 
   handleDeleteStockItem = (gameId) => {

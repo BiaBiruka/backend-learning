@@ -1,6 +1,6 @@
 // CONTROLLER - "Breaks" request params, calls the service and deals with return status/messages
 const GamesRepository = require("../repositories/GamesRepository");
-const StockRepository = require("../repositories/sqlite/stockRepository");
+const StockRepository = require("../repositories/StockRepository");
 const { GamesService } = require("../services/gamesService");
 const { handleFetchDatabase } = require("../utils/connection");
 
@@ -8,7 +8,7 @@ class GamesController {
   async fetchAllGames(_, res) {
     const dbConnection = await handleFetchDatabase();
     const gamesRepository = GamesRepository.getRepository(dbConnection);
-    const stockRepository = new StockRepository();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const gameServiceInstance = new GamesService({
       gamesRepository,
       stockRepository,
@@ -23,7 +23,7 @@ class GamesController {
   async fetchGameByQuery(req, res) {
     const dbConnection = await handleFetchDatabase();
     const gamesRepository = GamesRepository.getRepository(dbConnection);
-    const stockRepository = new StockRepository();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const gameServiceInstance = new GamesService({
       gamesRepository,
       stockRepository,
@@ -37,7 +37,7 @@ class GamesController {
   async fetchGameByParam(req, res) {
     const dbConnection = await handleFetchDatabase();
     const gamesRepository = GamesRepository.getRepository(dbConnection);
-    const stockRepository = new StockRepository();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const gameServiceInstance = new GamesService({
       gamesRepository,
       stockRepository,
@@ -51,7 +51,7 @@ class GamesController {
   async addGame(req, res) {
     const dbConnection = await handleFetchDatabase();
     const gamesRepository = GamesRepository.getRepository(dbConnection);
-    const stockRepository = new StockRepository();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const gameServiceInstance = new GamesService({
       gamesRepository,
       stockRepository,
@@ -72,7 +72,7 @@ class GamesController {
   async editGame(req, res) {
     const dbConnection = await handleFetchDatabase();
     const gamesRepository = GamesRepository.getRepository(dbConnection);
-    const stockRepository = new StockRepository();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const gameServiceInstance = new GamesService({
       gamesRepository,
       stockRepository,
@@ -89,7 +89,7 @@ class GamesController {
   async deleteGame(req, res) {
     const dbConnection = await handleFetchDatabase();
     const gamesRepository = GamesRepository.getRepository(dbConnection);
-    const stockRepository = new StockRepository();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const gameServiceInstance = new GamesService({
       gamesRepository,
       stockRepository,

@@ -1,9 +1,5 @@
 // SERVICE - Calls the function to interact with DB and deals with business rules
 const AppError = require("../../AppError");
-const {
-  handleInsertStockItem,
-  handleDeleteStockItem,
-} = require("../repositories/sqlite/stockRepository");
 
 class GamesService {
   constructor({ gamesRepository, stockRepository }) {
@@ -29,6 +25,7 @@ class GamesService {
 
   async addGame(name, price, currentStock, reorderPoint, orderedReestock) {
     const game = await this.gamesRepository.handleSelectByName(name);
+
     if (game) {
       throw new AppError(`'${game.name}' already exists!`, 409);
     }
@@ -38,7 +35,7 @@ class GamesService {
     });
 
     // Add stock entry
-    const gameId = requestResult.lastInsertRowid;
+    const gameId = requestResult.newGameId;
     await this.stockRepository.handleInsertStockItem({
       gameId,
       currentStock,
@@ -61,7 +58,6 @@ class GamesService {
     const game = await this.gamesRepository.handleSelectById(id);
 
     if (game) {
-      // TODO: change this once I have stock repo on new pattern
       await this.stockRepository.handleDeleteStockItem(id);
       await this.gamesRepository.handleDelete(id);
     } else {

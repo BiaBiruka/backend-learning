@@ -1,9 +1,11 @@
-const StockRepository = require("../repositories/sqlite/stockRepository");
+const StockRepository = require("../repositories/StockRepository");
 const { StockService } = require("../services/stockService");
+const { handleFetchDatabase } = require("../utils/connection");
 
 class StockController {
   async fetchFullStock(_, res) {
-    const stockRepository = new StockRepository();
+    const dbConnection = await handleFetchDatabase();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const stockServiceInstance = new StockService({ stockRepository });
     const result = await stockServiceInstance.fetchFullStock();
     return res
@@ -12,7 +14,8 @@ class StockController {
   }
 
   async fetchGameStock(req, res) {
-    const stockRepository = new StockRepository();
+    const dbConnection = await handleFetchDatabase();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const stockServiceInstance = new StockService({ stockRepository });
     const { gameId } = req.params;
     const result = await stockServiceInstance.fetchGameStock(gameId);
@@ -20,7 +23,8 @@ class StockController {
   }
 
   async updateStock(req, res) {
-    const stockRepository = new StockRepository();
+    const dbConnection = await handleFetchDatabase();
+    const stockRepository = StockRepository.getRepository(dbConnection);
     const stockServiceInstance = new StockService({ stockRepository });
     const { gameId } = req.params;
     const { newStock } = req.body;

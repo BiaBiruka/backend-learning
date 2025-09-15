@@ -15,9 +15,10 @@ class GamesRepository {
   };
 
   handleInsert = (game) => {
-    return this.dbConnection
+    const res = this.dbConnection
       .prepare("INSERT INTO games (name, price) VALUES (?, ?)")
       .run(game.name, game.price);
+    return { newGameId: res.lastInsertRowid };
   };
 
   handleSelectById = (id) => {

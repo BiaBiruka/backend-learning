@@ -5,42 +5,121 @@ class GamesRepository {
     this.dbConnection = dbConnection;
   }
 
-  async handleInsert(gameName, gamePrice) {
-    await this.dbConnection
+  async handleInsert(game) {
+    const res = await this.dbConnection
       .collection("games")
-      .insertOne({ name: gameName, price: gamePrice });
+      .insertOne({ name: game.name, price: game.price });
+    return { newGameId: res.insertedId };
   }
 
   async handleSelectAll() {
-    console.log("select all mongo");
-    const res = await this.dbConnection.collection("games").find({}).toArray();
+    const res = await this.dbConnection
+      .collection("games")
+      .aggregate([
+        {
+          $lookup: {
+            from: "stock",
+            localField: "_id",
+            foreignField: "game_id",
+            as: "stockInfo",
+          },
+        },
+        {
+          $unwind: {
+            path: "$stockInfo",
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            price: 1,
+            stock: "$stockInfo.stock",
+          },
+        },
+      ])
+      .toArray();
     return res;
   }
 
   async handleSelectById(gameId) {
     const res = await this.dbConnection
       .collection("games")
-      .findOne({ _id: new ObjectId(gameId) });
+      .aggregate([
+        { $match: { _id: new ObjectId(gameId) } },
+        {
+          $lookup: {
+            from: "stock",
+            localField: "_id",
+            foreignField: "game_id",
+            as: "stockInfo",
+          },
+        },
+        {
+          $unwind: {
+            path: "$stockInfo",
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            price: 1,
+            stock: "$stockInfo.stock",
+          },
+        },
+      ])
+      .next();
     return res;
   }
 
   async handleSelectByName(gameName) {
+    // TODO: case sensitive search
     const res = await this.dbConnection
       .collection("games")
-      .findOne({ name: gameName });
+      .aggregate([
+        {
+          $match: {
+            name: { $regex: `^${gameName}$`, $options: "i" },
+          },
+        },
+        {
+          $lookup: {
+            from: "stock",
+            localField: "_id",
+            foreignField: "game_id",
+            as: "stockInfo",
+          },
+        },
+        {
+          $unwind: {
+            path: "$stockInfo",
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            price: 1,
+            stock: "$stockInfo.stock",
+          },
+        },
+      ])
+      .next();
+
     return res;
   }
 
-  async handleDelete(gameId) {
+  async handleDelete(id) {
     await this.dbConnection
       .collection("games")
-      .deleteOne({ _id: new ObjectId(gameId) });
+      .deleteOne({ _id: new ObjectId(id) });
   }
 
-  async handleUpdate(newPrice, gameId) {
+  async handleUpdate(gameData) {
     await this.dbConnection
       .collection("games")
-      .updateOne({ _id: new ObjectId(gameId) }, { $set: { price: newPrice } });
+      .updateOne(
+        { _id: new ObjectId(gameData.id) },
+        { $set: { price: gameData.newPrice } }
+      );
   }
 
   // async handleInserAll(this.dbConnection) {
