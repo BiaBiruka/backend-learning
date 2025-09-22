@@ -1,3 +1,5 @@
+const { games } = require("../seed/gamesSeed.js");
+
 // REPOSITORY - The actual DB functions
 class GamesRepository {
   constructor(dbConnection) {
@@ -46,17 +48,21 @@ class GamesRepository {
       .prepare("UPDATE games SET price = ? WHERE id = ?")
       .run(gameData.newPrice, gameData.id);
   };
-}
 
-// // Strict is used in order to not try to autocorrect the data if something is wrong in a insert/update
-// this.dbConnection.exec(
-//   `CREATE TABLE IF NOT EXISTS games(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL) STRICT`
-// );
-// // Add all data again
-// const { games } = require("../seed/gamesSeed.js");
-// for (const game of games) {
-//   console.log(game);
-//   handleInsert.run(game.name, game.price);
-// }
+  handleDeleteAll() {
+    this.dbConnection.prepare("DELETE FROM games").run();
+  }
+
+  handleInsertAll = () => {
+    const insertedIdsArray = [];
+
+    games.forEach((game) => {
+      const { newGameId } = this.handleInsert(game);
+      insertedIdsArray.push(newGameId);
+    });
+
+    return insertedIdsArray;
+  };
+}
 
 module.exports = GamesRepository;

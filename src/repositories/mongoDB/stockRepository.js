@@ -96,6 +96,23 @@ class StockRepository {
       .next();
     return res;
   }
+
+  async handleDeleteAll() {
+    await this.dbConnection.collection("stock").deleteMany({});
+  }
+
+  async handleInsertAll(gameIds) {
+    const docsToAdd = gameIds.map((id) => {
+      return {
+        game_id: id,
+        stock: 10,
+        reorder_point: 10,
+        ordered_reestock: 0,
+      };
+    });
+
+    await this.dbConnection.collection("stock").insertMany(docsToAdd);
+  }
 }
 
 module.exports = StockRepository;

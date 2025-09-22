@@ -15,7 +15,7 @@ class StockService {
       return {
         ...game,
         needs_reestock: game.stock < game.reorder_point,
-        ordered_reestock: game.ordered_reestock === 1 ? true : false,
+        ordered_reestock: Boolean(game.ordered_reestock),
       };
     });
     return reestockCheckedResult;
@@ -29,7 +29,7 @@ class StockService {
     const reestockCheckedResult = {
       ...requestResult,
       needs_reestock: requestResult.stock < requestResult.reorder_point,
-      ordered_reestock: requestResult.ordered_reestock === 1 ? true : false,
+      ordered_reestock: Boolean(requestResult.ordered_reestock),
     };
     return reestockCheckedResult;
   }

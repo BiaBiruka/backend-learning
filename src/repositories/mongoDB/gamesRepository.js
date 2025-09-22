@@ -1,4 +1,5 @@
 const { ObjectId } = require("mongodb");
+const { games } = require("../seed/gamesSeed.js");
 
 class GamesRepository {
   constructor(dbConnection) {
@@ -121,10 +122,18 @@ class GamesRepository {
       );
   }
 
-  // async handleInserAll(this.dbConnection) {
-  //   const { games } = require("../seed/gamesSeed.js");
-  //   await this.dbConnection.db("backend-learning").collection("games").insertMany(games);
-  // }
+  async handleDeleteAll() {
+    await this.dbConnection.collection("games").deleteMany({});
+  }
+
+  async handleInsertAll() {
+    const { insertedIds } = await this.dbConnection
+      .collection("games")
+      .insertMany(games);
+
+    const insertedIdsArray = Object.values(insertedIds);
+    return insertedIdsArray;
+  }
 }
 
 module.exports = GamesRepository;

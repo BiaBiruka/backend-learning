@@ -5,6 +5,7 @@ const express = require("express");
 // require("express-async-errors");
 const { gamesRouter } = require("./src/routes/gamesRoutes");
 const { stockRouter } = require("./src/routes/stockRoutes");
+const { adminRouter } = require("./src/routes/adminRoutes");
 
 const app = express();
 app.use(express.json());
@@ -15,9 +16,9 @@ app.listen(port, () => {
   console.log(`Server successfully running in port ${port}.`);
 });
 
-// TODO - "Insert all" routes (refreshDB)
 app.use("/games", gamesRouter);
 app.use("/stock", stockRouter);
+app.use("/admin", adminRouter);
 
 app.use((error, _, res, __) => {
   if (error.status) {

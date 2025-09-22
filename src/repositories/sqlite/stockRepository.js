@@ -43,22 +43,21 @@ class StockRepository {
       )
       .all();
   };
+
+  async handleDeleteAll() {
+    this.dbConnection.prepare("DELETE FROM stock").run();
+  }
+
+  async handleInsertAll(gameIds) {
+    gameIds.map((id) =>
+      this.handleInsertStockItem({
+        gameId: id,
+        currentStock: 10,
+        reorderPoint: 10,
+        orderedReestock: 0,
+      })
+    );
+  }
 }
-
-// this.dbConnection.exec(
-//   `CREATE TABLE IF NOT EXISTS stock(
-//     game_id INTEGER PRIMARY KEY,
-//     stock INTEGER,
-//     reorder_point INTEGER,
-//     ordered_reestock INTEGER CHECK (ordered_reestock IN (0,1)),
-//     FOREIGN KEY (game_id) REFERENCES games(id)
-//   ) STRICT`
-// );
-
-// let count = 0;
-// for (let i = 1; i < 31; i += 1) {
-//   handleInsertStockItem.run(i, 5, 3, 0);
-//   count += 1;
-// }
 
 module.exports = StockRepository;
